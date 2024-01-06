@@ -1,3 +1,3 @@
 # Nucleo
 
-A bioinformatics library for Go (focused on Human Genomics).
+A Bioinformatics library for Go.

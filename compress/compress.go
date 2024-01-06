@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later
  *
- * Zymatik Nucleo - A bioinformatics library for Go (focused on Human Genomics).
+ * Zymatik Nucleo - A Bioinformatics library for Go.
  * Copyright (C) 2024 Damian Peckett <damian@pecke.tt>
  *
  * This program is free software: you can redistribute it and/or modify
