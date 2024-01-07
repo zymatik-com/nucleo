@@ -225,7 +225,7 @@ func Read(reader io.Reader) (*ChainFile, error) {
 }
 
 // GetChain returns the chain for the given chromosome and position.
-func (cf *ChainFile) GetChain(ctx context.Context, fromReference, chromosome string, position int64) (*types.Chain, error) {
+func (cf *ChainFile) GetChain(ctx context.Context, from types.Reference, chromosome string, position int64) (*types.Chain, error) {
 	tree, ok := cf.ChainsByChromosome[chromosome]
 	if !ok {
 		return nil, fmt.Errorf("chromosome %s not found", chromosome)

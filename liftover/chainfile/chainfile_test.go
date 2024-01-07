@@ -29,6 +29,7 @@ import (
 	"github.com/brentp/vcfgo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/zymatik-com/genobase/types"
 	"github.com/zymatik-com/nucleo/compress"
 	"github.com/zymatik-com/nucleo/liftover"
 	"github.com/zymatik-com/nucleo/liftover/chainfile"
@@ -74,7 +75,7 @@ func TestChainFile(t *testing.T) {
 
 		foundInBoth++
 
-		result, err := liftover.Lift(ctx, cf, "GRCh37", snp.chromosome, snp.position)
+		result, err := liftover.Lift(ctx, cf, types.ReferenceGRCh37, snp.chromosome, snp.position)
 		if err != nil {
 			continue
 		}

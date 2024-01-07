@@ -12,7 +12,7 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.19
 	github.com/stretchr/testify v1.8.4
 	github.com/ulikunitz/xz v0.5.11
-	github.com/zymatik-com/genobase v0.1.0
+	github.com/zymatik-com/genobase v0.2.0
 )
 
 require (
@@ -30,7 +30,7 @@ require (
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/sethvargo/go-retry v0.2.4 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/sync v0.5.0 // indirect
+	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

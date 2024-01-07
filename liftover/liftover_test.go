@@ -33,6 +33,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/zymatik-com/genobase"
+	"github.com/zymatik-com/genobase/types"
 	"github.com/zymatik-com/nucleo/compress"
 	"github.com/zymatik-com/nucleo/liftover"
 	"github.com/zymatik-com/nucleo/liftover/chainfile"
@@ -71,7 +72,7 @@ func TestLiftOver(t *testing.T) {
 		cf, err := chainfile.Read(dr)
 		require.NoError(t, err)
 
-		err = liftover.StoreChainFile(ctx, db, "GRCh37", cf, false)
+		err = liftover.StoreChainFile(ctx, db, types.ReferenceGRCh37, cf, false)
 		require.NoError(t, err)
 	}
 
@@ -91,7 +92,7 @@ func TestLiftOver(t *testing.T) {
 		cf, err := chainfile.Read(dr)
 		require.NoError(t, err)
 
-		err = liftover.StoreChainFile(ctx, db, "NCBI36", cf, false)
+		err = liftover.StoreChainFile(ctx, db, types.ReferenceNCBI36, cf, false)
 		require.NoError(t, err)
 	}
 
@@ -110,7 +111,7 @@ func TestLiftOver(t *testing.T) {
 
 			foundInBoth++
 
-			result, err := liftover.Lift(ctx, db, "NCBI36", snp.chromosome, snp.position)
+			result, err := liftover.Lift(ctx, db, types.ReferenceNCBI36, snp.chromosome, snp.position)
 			if err != nil {
 				continue
 			}
@@ -142,7 +143,7 @@ func TestLiftOver(t *testing.T) {
 
 			foundInBoth++
 
-			result, err := liftover.Lift(ctx, db, "GRCh37", snp.chromosome, snp.position)
+			result, err := liftover.Lift(ctx, db, types.ReferenceGRCh37, snp.chromosome, snp.position)
 			if err != nil {
 				continue
 			}
