@@ -26,6 +26,8 @@ import (
 	"io"
 	"strconv"
 	"strings"
+
+	"github.com/zymatik-com/genobase/types"
 )
 
 type ancestryDNACodec struct{}
@@ -67,6 +69,10 @@ func (c *ancestryDNACodec) Open(r io.Reader) (Reader, error) {
 		reader:         reader,
 		columnMappings: columnMappings,
 	}, nil
+}
+
+func (r *ancestryDNAReader) Reference() types.Reference {
+	return types.ReferenceGRCh37
 }
 
 func (r *ancestryDNAReader) Read() (*SNP, error) {

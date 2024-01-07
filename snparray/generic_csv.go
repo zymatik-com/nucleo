@@ -26,6 +26,8 @@ import (
 	"io"
 	"strconv"
 	"strings"
+
+	"github.com/zymatik-com/genobase/types"
 )
 
 type genericCSVCodec struct{}
@@ -69,6 +71,12 @@ func (c *genericCSVCodec) Open(r io.Reader) (Reader, error) {
 		reader:         reader,
 		columnMappings: columnMappings,
 	}, nil
+}
+
+func (r *genericCSVReader) Reference() types.Reference {
+	// TODO: determine the reference assembly from the coordinates
+	// of some of the most common SNPs.
+	return types.ReferenceGRCh37
 }
 
 func (r *genericCSVReader) Read() (*SNP, error) {

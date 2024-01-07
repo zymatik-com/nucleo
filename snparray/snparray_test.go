@@ -25,6 +25,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/zymatik-com/genobase/types"
 	"github.com/zymatik-com/nucleo/compress"
 	"github.com/zymatik-com/nucleo/snparray"
 )
@@ -41,6 +42,9 @@ func TestSNPArrayOpen(t *testing.T) {
 
 		snpReader, err := snparray.Open(dr)
 		require.NoError(t, err)
+
+		ref := snpReader.Reference()
+		assert.Equal(t, types.ReferenceGRCh37, ref)
 
 		snp, err := snpReader.Read()
 		require.NoError(t, err)
@@ -71,6 +75,9 @@ func TestSNPArrayOpen(t *testing.T) {
 		snpReader, err := snparray.Open(dr)
 		require.NoError(t, err)
 
+		ref := snpReader.Reference()
+		assert.Equal(t, types.ReferenceGRCh37, ref)
+
 		snp, err := snpReader.Read()
 		require.NoError(t, err)
 
@@ -99,6 +106,9 @@ func TestSNPArrayOpen(t *testing.T) {
 
 		snpReader, err := snparray.Open(dr)
 		require.NoError(t, err)
+
+		ref := snpReader.Reference()
+		assert.Equal(t, types.ReferenceGRCh37, ref)
 
 		snp, err := snpReader.Read()
 		require.NoError(t, err)

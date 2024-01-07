@@ -27,6 +27,8 @@ import (
 	"io"
 	"strconv"
 	"strings"
+
+	"github.com/zymatik-com/genobase/types"
 )
 
 type twentyThreeAndMeCodec struct{}
@@ -94,33 +96,37 @@ func (c *twentyThreeAndMeCodec) Open(r io.Reader) (Reader, error) {
 	}, nil
 }
 
-func (d *twentyThreeAndMeReader) Read() (*SNP, error) {
+func (r *twentyThreeAndMeReader) Reference() types.Reference {
+	return types.ReferenceGRCh37
+}
+
+func (r *twentyThreeAndMeReader) Read() (*SNP, error) {
 	var record []string
 
 	// Skip over no call variants.
 	genotype := "--"
 	for genotype == "--" {
 		var err error
-		record, err = d.reader.Read()
+		record, err = r.reader.Read()
 		if err != nil {
 			return nil, err
 		}
 
-		if len(record) < len(d.columnMappings) {
+		if len(record) < len(r.columnMappings) {
 			return nil, fmt.Errorf("not enough columns")
 		}
 
-		genotype = record[d.columnMappings["genotype"]]
+		genotype = record[r.columnMappings["genotype"]]
 	}
 
-	position, err := strconv.ParseInt(record[d.columnMappings["position"]], 10, 64)
+	position, err := strconv.ParseInt(record[r.columnMappings["position"]], 10, 64)
 	if err != nil {
 		return nil, fmt.Errorf("error parsing position: %s", err)
 	}
 
 	return &SNP{
-		RSID:       record[d.columnMappings["rsid"]],
-		Chromosome: record[d.columnMappings["chromosome"]],
+		RSID:       record[r.columnMappings["rsid"]],
+		Chromosome: record[r.columnMappings["chromosome"]],
 		Position:   position,
 		Genotype:   genotype,
 	}, nil

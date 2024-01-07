@@ -25,6 +25,8 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+
+	"github.com/zymatik-com/genobase/types"
 )
 
 type SNP struct {
@@ -44,6 +46,8 @@ type Codec interface {
 
 // Reader is a lazy SNP reader.
 type Reader interface {
+	// Reference returns the reference assembly used by the SNP array.
+	Reference() types.Reference
 	// Read reads the next SNP from the file. It returns io.EOF if there are no
 	// more SNPs.
 	Read() (*SNP, error)
