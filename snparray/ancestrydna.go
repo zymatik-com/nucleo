@@ -28,6 +28,7 @@ import (
 	"strings"
 
 	"github.com/zymatik-com/genobase/types"
+	"github.com/zymatik-com/nucleo/names"
 )
 
 type ancestryDNACodec struct{}
@@ -101,7 +102,7 @@ func (r *ancestryDNAReader) Read() (*SNP, error) {
 
 	return &SNP{
 		RSID:       record[r.columnMappings["rsid"]],
-		Chromosome: record[r.columnMappings["chromosome"]],
+		Chromosome: names.Chromosome(record[r.columnMappings["chromosome"]]),
 		Position:   position,
 		Genotype:   genotype,
 	}, nil
