@@ -25,6 +25,7 @@ import (
 func TestAutoDecompressingReadCloser(t *testing.T) {
 	paths := []string{
 		"testdata/test.bz2",
+		"testdata/test.bgz",
 		"testdata/test.gz",
 		"testdata/test.lz4",
 		"testdata/test.xz",

@@ -16,7 +16,9 @@ import (
 	"bytes"
 	"compress/bzip2"
 	"io"
+	"runtime"
 
+	"github.com/biogo/hts/bgzf"
 	"github.com/klauspost/compress/zlib"
 	"github.com/klauspost/compress/zstd"
 	gzip "github.com/klauspost/pgzip"
@@ -44,6 +46,27 @@ func Decompress(r io.Reader) (io.ReadCloser, error) {
 			Reader: bzip2.NewReader(r),
 		}, nil
 	case bytes.Equal(buf[0:2], []byte{0x1F, 0x8B}): // GZIP
+		extraFlagSet := buf[3]&0x04 != 0
+		if extraFlagSet {
+			extraLength := int(buf[10]) | int(buf[11])<<8
+
+			// BGZF magic extra field.
+			bgzfExtra := []byte{0x42, 0x43, 0x02, 0x00}
+			isBGZF := bytes.Equal(buf[12:12+extraLength], bgzfExtra)
+
+			if isBGZF {
+				bgzfReader, err := bgzf.NewReader(r, runtime.GOMAXPROCS(0))
+				if err != nil {
+					return nil, err
+				}
+
+				return &autoDecompressingReadCloser{
+					Reader: bgzfReader,
+					close:  bgzfReader.Close,
+				}, nil
+			}
+		}
+
 		gzReader, err := gzip.NewReader(r)
 		if err != nil {
 			return nil, err
@@ -51,13 +74,7 @@ func Decompress(r io.Reader) (io.ReadCloser, error) {
 
 		return &autoDecompressingReadCloser{
 			Reader: gzReader,
-			close: func() error {
-				if err := gzReader.Close(); err != nil {
-					return err
-				}
-
-				return nil
-			},
+			close:  gzReader.Close,
 		}, nil
 	case bytes.HasPrefix(buf, []byte{0x04, 0x22, 0x4D, 0x18}): // LZ4
 		lz4Reader := lz4.NewReader(r)

@@ -25,6 +25,7 @@ import (
 
 func TestAutoCompressingWriteCloser(t *testing.T) {
 	names := []string{
+		"test.bgz",
 		"test.gz",
 		"test.lz4",
 		"test.xz",

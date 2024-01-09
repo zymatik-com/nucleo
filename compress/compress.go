@@ -14,8 +14,10 @@ package compress
 
 import (
 	"io"
+	"runtime"
 	"strings"
 
+	"github.com/biogo/hts/bgzf"
 	"github.com/klauspost/compress/zstd"
 	gzip "github.com/klauspost/pgzip"
 	"github.com/pierrec/lz4/v4"
@@ -27,14 +29,19 @@ type autoCompressingWriteCloser struct {
 }
 
 // Guess the compression algorithm based on the file extension.
-// If none is found, use gzip.
 func Compress(name string, w io.Writer) (io.WriteCloser, error) {
 	switch {
-	case strings.HasSuffix(name, ".lz4"):
-		lz4Writer := lz4.NewWriter(w)
-
+	case strings.HasSuffix(name, ".bgz"):
 		return &autoCompressingWriteCloser{
-			WriteCloser: lz4Writer,
+			WriteCloser: bgzf.NewWriter(w, runtime.GOMAXPROCS(0)),
+		}, nil
+	case strings.HasSuffix(name, ".gz"):
+		return &autoCompressingWriteCloser{
+			WriteCloser: gzip.NewWriter(w),
+		}, nil
+	case strings.HasSuffix(name, ".lz4"):
+		return &autoCompressingWriteCloser{
+			WriteCloser: lz4.NewWriter(w),
 		}, nil
 	case strings.HasSuffix(name, ".xz"):
 		xzWriter, err := xz.NewWriter(w)
@@ -55,10 +62,18 @@ func Compress(name string, w io.Writer) (io.WriteCloser, error) {
 			WriteCloser: zstdWriter,
 		}, nil
 	default:
-		gzWriter := gzip.NewWriter(w)
-
 		return &autoCompressingWriteCloser{
-			WriteCloser: gzWriter,
+			WriteCloser: nopCloser(w),
 		}, nil
 	}
 }
+
+type nopCloserImpl struct {
+	io.Writer
+}
+
+func nopCloser(w io.Writer) io.WriteCloser {
+	return &nopCloserImpl{w}
+}
+
+func (nopCloserImpl) Close() error { return nil }

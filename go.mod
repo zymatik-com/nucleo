@@ -4,6 +4,7 @@ go 1.21.5
 
 require (
 	github.com/Workiva/go-datastructures v1.1.1
+	github.com/biogo/hts v1.4.4
 	github.com/brentp/vcfgo v0.0.0-20221128230736-759c0d32541e
 	github.com/cheggaaa/pb/v3 v3.1.4
 	github.com/klauspost/compress v1.17.4
