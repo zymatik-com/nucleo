@@ -49,7 +49,7 @@ import (
 //     ClinVar Variants. Genes 2023, 14, 1875. https://doi.org/10.3390/genes14101875.
 func TestLiftOver(t *testing.T) {
 	ctx := context.Background()
-	db, err := genobase.Open(ctx, slogt.New(t), "", false)
+	db, err := genobase.Open(ctx, slogt.New(t), "")
 	require.NoError(t, err)
 	t.Cleanup(func() {
 		require.NoError(t, db.Close())
