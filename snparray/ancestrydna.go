@@ -100,9 +100,33 @@ func (r *ancestryDNAReader) Read() (*SNP, error) {
 		return nil, fmt.Errorf("error parsing position: %s", err)
 	}
 
+	chromosome := names.Chromosome(record[r.columnMappings["chromosome"]])
+
+	// AncestryDNA has a very interesting chromosome naming convention.
+	if chromosome == "23" {
+		chromosome = "X"
+	} else if chromosome == "24" {
+		chromosome = "Y"
+	} else if chromosome == "25" {
+		chromosome = "PAR"
+
+		switch r.Reference() {
+		case types.ReferenceGRCh37:
+			if position >= 154931044 {
+				chromosome = "PAR2"
+			}
+		case types.ReferenceGRCh38:
+			if position >= 155701383 {
+				chromosome = "PAR2"
+			}
+		}
+	} else if chromosome == "26" {
+		chromosome = "MT"
+	}
+
 	return &SNP{
 		RSID:       record[r.columnMappings["rsid"]],
-		Chromosome: names.Chromosome(record[r.columnMappings["chromosome"]]),
+		Chromosome: chromosome,
 		Position:   position,
 		Genotype:   genotype,
 	}, nil
