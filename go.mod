@@ -1,6 +1,6 @@
 module github.com/zymatik-com/nucleo
 
-go 1.21.5
+go 1.21.0
 
 require (
 	github.com/Workiva/go-datastructures v1.1.1
