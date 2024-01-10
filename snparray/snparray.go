@@ -24,7 +24,7 @@ import (
 
 type SNP struct {
 	RSID       string
-	Chromosome string
+	Chromosome types.Chromosome
 	Position   int64
 	Genotype   string
 }

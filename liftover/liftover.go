@@ -30,7 +30,7 @@ import (
 // ChainSource is a source of chain and alignment information.
 type ChainSource interface {
 	// GetChain returns the chain for the given chromosome and position.
-	GetChain(ctx context.Context, from types.Reference, chromosome string, position int64) (*types.Chain, error)
+	GetChain(ctx context.Context, from types.Reference, chromosome types.Chromosome, position int64) (*types.Chain, error)
 	// GetAlignment returns the alignment for the given chain and offset from the
 	// start of the chain.
 	GetAlignment(ctx context.Context, chainID int64, offset int64) (*types.Alignment, error)
@@ -38,7 +38,7 @@ type ChainSource interface {
 
 // Lift returns the position in the query genome for the given position in the
 // reference genome.
-func Lift(ctx context.Context, src ChainSource, from types.Reference, chromosome string, position int64) (int64, error) {
+func Lift(ctx context.Context, src ChainSource, from types.Reference, chromosome types.Chromosome, position int64) (int64, error) {
 	chain, err := src.GetChain(ctx, from, chromosome, position)
 	if err != nil {
 		return -1, fmt.Errorf("could not get chain: %w", err)

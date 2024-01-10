@@ -30,6 +30,7 @@ import (
 	"github.com/zymatik-com/nucleo/compress"
 	"github.com/zymatik-com/nucleo/liftover"
 	"github.com/zymatik-com/nucleo/liftover/chainfile"
+	"github.com/zymatik-com/nucleo/names"
 )
 
 // A simple test to check if the liftover works as expected by validating the
@@ -153,7 +154,7 @@ func TestLiftOver(t *testing.T) {
 
 type snp struct {
 	id         int64
-	chromosome string
+	chromosome types.Chromosome
 	position   int64
 }
 
@@ -193,7 +194,7 @@ func readClinVarSNPs(path string) (map[int64]snp, error) {
 
 		snps[id] = snp{
 			id:         id,
-			chromosome: strings.ToUpper(strings.TrimPrefix(variant.Chromosome, "chr")),
+			chromosome: names.Chromosome(variant.Chromosome),
 			position:   int64(variant.Pos),
 		}
 	}
@@ -237,14 +238,9 @@ func readLegacySNPs(path string) (map[int64]snp, error) {
 			continue
 		}
 
-		chromosome := strings.ToUpper(strings.TrimPrefix(record[1], "chr"))
-		if chromosome == "M" {
-			chromosome = "MT"
-		}
-
 		snps[id] = snp{
 			id:         id,
-			chromosome: chromosome,
+			chromosome: names.Chromosome(record[1]),
 			// The position is 0-based in the legacy file.
 			position: position + 1,
 		}

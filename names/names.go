@@ -20,13 +20,13 @@ import (
 )
 
 // Chromosome returns a sanitized/standardized chromosome name.
-func Chromosome(chromosome string) string {
+func Chromosome(chromosome string) types.Chromosome {
 	chromosome = strings.ToUpper(strings.TrimPrefix(chromosome, "chr"))
 	if chromosome == "M" {
 		chromosome = "MT"
 	}
 
-	return chromosome
+	return types.Chromosome(chromosome)
 }
 
 // Reference returns a sanitized/standardized reference assembly name.

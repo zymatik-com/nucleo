@@ -32,12 +32,12 @@ import (
 // Chain represents a single Chain in a Chain file.
 type Chain struct {
 	Score       int64              // Alignment score.
-	RefName     string             // Reference chromosome name.
+	RefName     types.Chromosome   // Reference chromosome name.
 	RefSize     int64              // Size of the reference chromosome.
 	RefStrand   string             // Strand in the reference genome ('+' or '-').
 	RefStart    int64              // Start position in the reference genome.
 	RefEnd      int64              // End position in the reference genome.
-	QueryName   string             // Query chromosome name.
+	QueryName   types.Chromosome   // Query chromosome name.
 	QuerySize   int64              // Size of the query chromosome.
 	QueryStrand string             // Strand in the query genome ('+' or '-').
 	QueryStart  int64              // Start position in the query genome.
@@ -113,7 +113,7 @@ func (i *Interval) ID() uint64 {
 // ChainFile represents a chain file.
 type ChainFile struct {
 	// ChainsByChromosome maps a chromosome name to an interval tree of chains.
-	ChainsByChromosome map[string]augmentedtree.Tree
+	ChainsByChromosome map[types.Chromosome]augmentedtree.Tree
 	// ChainByID maps a chain ID to a chain.
 	ChainByID map[int64]*Chain
 }
@@ -121,7 +121,7 @@ type ChainFile struct {
 // Read loads a chain file from an io.Reader.
 func Read(reader io.Reader) (*ChainFile, error) {
 	chainFile := &ChainFile{
-		ChainsByChromosome: make(map[string]augmentedtree.Tree),
+		ChainsByChromosome: make(map[types.Chromosome]augmentedtree.Tree),
 		ChainByID:          make(map[int64]*Chain),
 	}
 
@@ -218,7 +218,7 @@ func Read(reader io.Reader) (*ChainFile, error) {
 }
 
 // GetChain returns the chain for the given chromosome and position.
-func (cf *ChainFile) GetChain(ctx context.Context, from types.Reference, chromosome string, position int64) (*types.Chain, error) {
+func (cf *ChainFile) GetChain(ctx context.Context, from types.Reference, chromosome types.Chromosome, position int64) (*types.Chain, error) {
 	tree, ok := cf.ChainsByChromosome[chromosome]
 	if !ok {
 		return nil, fmt.Errorf("chromosome %s not found", chromosome)
